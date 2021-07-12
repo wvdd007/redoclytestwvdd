@@ -1,0 +1,35 @@
+{
+   "inputs": [
+      {
+         "inputFile": "gateway.swagger.json"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/contactserviceapi/euroconsumers-contacts-api-controllers-phonevalidation-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinemdsapi/ec-medicine-mds-api-controllers-companies-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/localportugalservices/euroconsumers-localportugalservices-api-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinemdsapi/ec-medicine-mds-api-controllers-formulas-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinemdsapi/ec-medicine-mds-api-controllers-waysofadministration-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/mile21/ec-mile21-api-controllers-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinemdsapi/ec-medicine-mds-api-controllers-galenicforms-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinedcsapi/ec-medicine-dcs-api-controllers-2.swagger"
+      },
+      {
+         "inputFile": "C:/Users/wvd/AppData/Local/Temp/services/medicinemdsapi/ec-medicine-mds-api-controllers-products-2.swagger"
+      }
+  ],
+   "output": "./output.swagger.json"
+}

@@ -1,0 +1,18 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "EuroConsumers.BeanApi",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://beanapi.identity.pro.internet.conseur.org:5190",
+      "description": "base path for bean"
+    },
+    {
+        "url": "https://mile21.com",        
+        "description": "base path for mile21"
+      }
+    ],
+    "paths":{}
+}

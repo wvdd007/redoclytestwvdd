@@ -1,0 +1,1697 @@
+openapi: 3.0.1
+info:
+  title: EuroConsumers.BeanApi
+  version: v1
+servers:
+  - url: 'https://beanapi.identity.pro.internet.conseur.org:5190'
+paths:
+  /api/Authentication/RenewPassport:
+    post:
+      tags:
+        - Authentication
+      summary: >-
+        Refreshes the passport based on a refresh token that was previously
+        acquired
+      description: >-
+        The realm specified must match the realm for the refresh token.  One
+        cannot use a refresh token for another applciation.
+      operationId: Authentication_RenewPassport
+      requestBody:
+        description: "Contains the realm which identifies the application (ex eur://euroconsumers.pro.alinesc/it-it/), \r\n            the audit context which is optional and allows one to give additional information about where this request occurs in the application (ex:ct:feature.subfeature),\r\n            the original refresh token."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/Authentication/RenewRefreshToken:
+    post:
+      tags:
+        - Authentication
+      summary: Renews the refresh token based on the previous refresh token.
+      description: >-
+        Refresh token expire and should therefore be renewed.  Using this action
+        makes sure you minimize the risk of an expired refresh token.
+      operationId: Authentication_RenewRefreshToken
+      requestBody:
+        description: "Contains the realm which identifies the application (ex eur://euroconsumers.pro.alinesc/it-it/), \r\n            the audit context which is optional and allows one to give additional information about where this request occurs in the application (ex:ct:feature.subfeature),\r\n            the refresh token."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RenewTokenRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+  /api/Authentication/GetOnetimePasswordUrl:
+    post:
+      tags:
+        - Authentication
+      summary: >-
+        Renews the refresh token based on the previous refresh token and return
+        a onetime password based on the given realm and reply
+      description: >-
+        Refresh token expire and should therefore be renewed.  Using this action
+        makes sure you minimize the risk of an expired refresh token.
+      operationId: Authentication_GetOnetimePasswordUrl
+      requestBody:
+        description: "Contains the realm which identifies the application (ex eur://euroconsumers.pro.alinesc/it-it/), \r\n            the audit context which is optional and allows one to give additional information about where this request occurs in the application (ex:ct:feature.subfeature),\r\n            the refresh token."
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetOnetimePasswordUrlRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GetOnetimePasswordUrlRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetOnetimePasswordUrlRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/GetOnetimePasswordUrlRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetOnetimePasswordUrlRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOnetimePasswordUrlResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GetOnetimePasswordUrlResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetOnetimePasswordUrlResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GetOnetimePasswordUrlResponse'
+  /api/Authentication/SignIn:
+    post:
+      tags:
+        - Authentication
+      summary: >-
+        Signs a user based on user name and password and returns a passport with
+        an optional refresh token
+      description: "The token (passport) will be for the realm in the request.  If an application wants to use this functionality it has to be activated.\r\n            The refresh token is only valid for this application(realm) and cannot be used for other applications.  The refresh token will become invalid if the user updates her password."
+      operationId: Authentication_SignIn
+      requestBody:
+        description: A SignInRequest parameter
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignInRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithRefreshToken'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/Authentication/TrySignIn:
+    post:
+      tags:
+        - Authentication
+      summary: >-
+        TrySignIn function signin a user based on cookies automatically without
+        showing Login Screen.
+      description: >-
+        The access token is only valid for this application(realm) and cannot be
+        used for other applications.
+      operationId: Authentication_TrySignIn
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrySigninRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TrySigninRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/TrySigninRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/TrySigninRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TrySigninRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithAccessTokenTrySignin'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PassportWithAccessTokenTrySignin'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithAccessTokenTrySignin'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PassportWithAccessTokenTrySignin'
+        '400':
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/Configuration/GetPoliciesForRealm:
+    get:
+      tags:
+        - Configuration
+      summary: Get actives policies for realm
+      description: >-
+        This Api allow to found out which policies are currently actives for a
+        dedicated realm, which must be accepted by customers.
+      operationId: Configuration_GetPoliciesForRealm
+      parameters:
+        - name: realm
+          in: query
+          description: realm for which the policies must be retrieved
+          required: true
+          schema:
+            type: string
+        - name: variation
+          in: query
+          description: >-
+            The optional variation for the policies.  This can be empty or the
+            description of the petition, class action or promosite code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PolicyDescription'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PolicyDescription'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PolicyDescription'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PolicyDescription'
+  /api/Configuration/GetExternalIdentityProviderUrls:
+    post:
+      tags:
+        - Configuration
+      summary: Get external providers for realm
+      description: "Retrieved all allowed providers that can be use for a specifyed realm.\r\n            The action wsignin1.0 or registeruer1.0 must be provided regarding the expected behaviour.\r\n            * the wsignin1.0 allow a customer to be signin on TA\r\n            * the registeruer1.0 will first register the user then do a signin on TA"
+      operationId: Configuration_GetExternalIdentityProviderUrls
+      requestBody:
+        description: The request.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalIdentityProviderUrlsRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExternalIdentityProviderUrlsRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ExternalIdentityProviderUrlsRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ExternalIdentityProviderUrlsRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExternalIdentityProviderUrlsRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalIdentityProvider'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalIdentityProvider'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalIdentityProvider'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalIdentityProvider'
+  /api/Configuration/GetMissingClaimsForRealm:
+    get:
+      tags:
+        - Configuration
+      summary: Get missing claims for realm
+      description: >-
+        Retrieved all missing claims requested to be filled in by customers for
+        a given realm
+      operationId: Configuration_GetMissingClaimsForRealm
+      parameters:
+        - name: realm
+          in: query
+          description: realm for which the missing claims must be retrieved
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MissingClaim'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MissingClaim'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MissingClaim'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MissingClaim'
+  /api/Configuration/GetPoliciesAndConsentsForRealm:
+    get:
+      tags:
+        - Configuration
+      summary: NEW Get policies and consents for a specific application (Realm)
+      operationId: Configuration_GetPoliciesAndConsentsForRealm
+      parameters:
+        - name: realm
+          in: query
+          description: realm for which policies and consents must be retrieved
+          required: true
+          schema:
+            type: string
+        - name: variation
+          in: query
+          description: >-
+            The optional variation for the policies.  This can be empty or the
+            description of the petition, class action or promosite code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+  /api/Configuration/GetMissingPoliciesAndConsentsForUser:
+    get:
+      tags:
+        - Configuration
+      summary: >-
+        Get policies and consents for a specific application (Realm) and FedId
+        WITH filter: only the ones to display
+      operationId: Configuration_GetMissingPoliciesAndConsentsForUser
+      parameters:
+        - name: realm
+          in: query
+          description: The realm.
+          required: true
+          schema:
+            type: string
+        - name: requestFedId
+          in: query
+          description: The request fed identifier.
+          required: true
+          schema:
+            type: string
+        - name: variation
+          in: query
+          description: >-
+            The optional variation for the policies.  This can be empty or the
+            description of the petition, class action or promosite code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+  /api/Configuration/GetPoliciesAndConsentsForUser:
+    get:
+      tags:
+        - Configuration
+      summary: >-
+        NEW Get policies and consents for a specific application (Realm) and
+        FedId
+      operationId: Configuration_GetPoliciesAndConsentsForUser
+      parameters:
+        - name: realm
+          in: query
+          description: The realm.
+          required: true
+          schema:
+            type: string
+        - name: requestFedId
+          in: query
+          description: The request fed identifier.
+          required: true
+          schema:
+            type: string
+        - name: variation
+          in: query
+          description: >-
+            The optional variation for the policies.  This can be empty or the
+            description of the petition, class action or promosite code
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/PoliciesAndConsents'
+  /api/Configuration/SetConsentsForApplicationAndUser:
+    post:
+      tags:
+        - Configuration
+      summary: NEW Store consents for a given FedId in a given Application (Realm)
+      description: ''
+      operationId: Configuration_SetConsentsForApplicationAndUser
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetConsentsForApplicationAndUserRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetConsentsForApplicationAndUserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SetConsentsForApplicationAndUserRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SetConsentsForApplicationAndUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetConsentsForApplicationAndUserRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetConsentsResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetConsentsResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetConsentsResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetConsentsResponse'
+  /api/Configuration/SetPoliciesForApplicationAndUser:
+    post:
+      tags:
+        - Configuration
+      summary: NEW Store policies for a given FedId in a given Application (Realm)
+      operationId: Configuration_SetPoliciesForApplicationAndUser
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPoliciesForApplicationAndUserRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SetPoliciesForApplicationAndUserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SetPoliciesForApplicationAndUserRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SetPoliciesForApplicationAndUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SetPoliciesForApplicationAndUserRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPoliciesResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SetPoliciesResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SetPoliciesResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SetPoliciesResponse'
+  /api/ConfirmData/GenerateConfirmDataUrl:
+    post:
+      tags:
+        - ConfirmData
+      summary: >-
+        An operation to generate a link to confirm one's account, used when the
+        caller wants to send a mail with it's own mailing system
+      operationId: ConfirmData_GenerateConfirmDataUrl
+      requestBody:
+        description: The GenerateConfirmationUrlRequest
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateConfirmationUrlRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/GenerateConfirmationUrlRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GenerateConfirmationUrlRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/GenerateConfirmationUrlRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenerateConfirmationUrlRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateConfirmationUrlResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/GenerateConfirmationUrlResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GenerateConfirmationUrlResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/GenerateConfirmationUrlResponse'
+  /api/Identification/SendConfirmationMail:
+    post:
+      tags:
+        - Identification
+      summary: Request to send a mail for an identified user to confirm one's account
+      operationId: Identification_SendConfirmationMail
+      requestBody:
+        description: "Contains the realm which identifies the application (ex eur://euroconsumers.pro.alinesc/it-it/), \r\n             The federated userid is expected in a format like 'usr://fed/5bc464a2-ae40-4c01-85a7-526e1d38c18d' or in it's short notation like 5bc464a2ae404c0185a7526e1d38c18d\r\n             The wreply parameter is optional and will be passed when a user clicks the link in one's mail, after confirming one's account, we return to this path\r\n             If not provided, we return the the 'base' url for the given realm"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendConfirmationEmailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SendConfirmationEmailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SendConfirmationEmailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SendConfirmationEmailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SendConfirmationEmailRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendConfirmationEmailResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SendConfirmationEmailResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SendConfirmationEmailResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SendConfirmationEmailResponse'
+  /api/Identification/GenerateLinkToConfirmAccountAndSetAuthenticationMethod:
+    post:
+      tags:
+        - Identification
+      summary: >-
+        An operation to generate a link to confirm one's account and add an
+        authentication method, used when the caller wants to send a mail with
+        it's own mailing system
+      operationId: Identification_GenerateLinkToConfirmAccountAndSetAuthenticationMethod
+      requestBody:
+        description: The GenerateConfirmationUrlRequest
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest
+          text/json:
+            schema:
+              $ref: >-
+                #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest
+          application/xml:
+            schema:
+              $ref: >-
+                #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest
+          text/xml:
+            schema:
+              $ref: >-
+                #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: >-
+                #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodResponse
+            text/json:
+              schema:
+                $ref: >-
+                  #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodResponse
+            application/xml:
+              schema:
+                $ref: >-
+                  #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodResponse
+            text/xml:
+              schema:
+                $ref: >-
+                  #/components/schemas/GenerateLinkToConfirmAccountAndSetAuthenticationMethodResponse
+  /api/Identification/IdentifyUser:
+    post:
+      tags:
+        - Identification
+      summary: 'Identifies a user by her email address, first and last name.'
+      description: "The identify operation will nearly always succeed. \r\n            It returns a federated user id of the user and the security token containing the \"passport\".\r\n            The passport contains the info on whether the user already existed before the call and whether she has any authentication methods (password, facebook, twitter , ....) already associated with her account."
+      operationId: Identification_IdentifyUser
+      requestBody:
+        description: >-
+          The request. Mind that contexttype can be None (the default value) or
+          IsTestRun (in case you want to test a disposable email address).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdentifyUserRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/IdentifyUserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/IdentifyUserRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/IdentifyUserRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdentifyUserRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentifyUserResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IdentifyUserResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/IdentifyUserResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/IdentifyUserResponse'
+  /api/Registration/Register:
+    post:
+      tags:
+        - Registration
+      summary: >-
+        Registers a new user for the given application with the given user name
+        and password.
+      description: "Register a user on Euroconsumers. \r\n            For any registration all mandatory policies must be sent depending on the realm used.\r\n            It is possible to specify the keys of the policies that have been accepted by the user in the Policies array.\r\n            Additional information such as firstname, lastname, email ... can be passed in the collection of claims.  (It is possible to see a list of claims for your application\r\n            using the url https://login.test-aankoop.be/FederationMetadata/2007-06/FederationMetadata.xml?wtRealm=yourRealm)\r\n            The Optout flag controls whether the user will be registered for email campaigns and newsletters.\r\n            For registration using Facebook and twitter you can use the \"/api/Configuration/getexternalidentityproviderurls\" operation to first get the correct urls."
+      operationId: Registration_Register
+      requestBody:
+        description: >-
+          The request. Mind that contexttype can be None (the default value) or
+          IsTestRun (in case you want to test a disposable email address).
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SigninResponse'
+  /api/Registration/ResendConfirmationMail:
+    post:
+      tags:
+        - Registration
+      summary: Request to send a mail for an identified user to confirm one's account
+      operationId: Registration_ResendConfirmationMail
+      requestBody:
+        description: "Contains the realm which identifies the application (ex eur://euroconsumers.pro.alinesc/it-it/), \r\n             The email is required \r\n             The context parameter is optional and will be passed when a user clicks the link in one's mail, after confirming one's account, we return to this path\r\n             The devicetype can be passed when it's detected"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendConfirmationEmailRequest'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ResendConfirmationEmailRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ResendConfirmationEmailRequest'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/ResendConfirmationEmailRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendConfirmationEmailRequest'
+        required: true
+        x-bodyName: request
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendConfirmationEmailResponse'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ResendConfirmationEmailResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ResendConfirmationEmailResponse'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ResendConfirmationEmailResponse'
+components:
+  schemas:
+    RenewTokenRequest:
+      required:
+        - realm
+      type: object
+      properties:
+        refreshtoken:
+          type: string
+          description: "Gets or sets the refresh token.  This is a token that was originally passed in the passport as a refresh token.  It\r\n                can be used\r\n                to ask an new passport long after the passport has expired."
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: >-
+        This class encapsulates a request to the active API to refresh as
+        passport
+    SigninResponse:
+      type: object
+      properties:
+        realm:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.
+        onetimepasswordurl:
+          type: string
+          description: >-
+            Gets or sets the one time password Url that can be used to do an
+            automatic login on the bean
+        access_token:
+          type: string
+          description: "Gets or sets the security token that was issued by the api.  This token is a Json token for \"internal\"\r\n            clients and a SAML2 token for \"external\" clients."
+        token_format:
+          type: array
+          items:
+            type: string
+          description: >-
+            Specifies the format of  the token passed in
+            {Euroconsumers.BeanApi.Contracts.Msg.Responses.AccessTokenResponse.SecurityToken}.
+        signout:
+          $ref: '#/components/schemas/WSignout'
+      description: "The signin response class defines the model returned by the api when a request was done \r\n            to sign in.  The model will contain the realm for which the security token\r\n            was request as well as the security token in string form.  Depending on the caller this will either\r\n            be an encoded Json or SAML token."
+    WSignout:
+      required:
+        - key
+        - value
+        - domain
+      type: object
+      properties:
+        key:
+          type: string
+          description: Name of the Signout cookie
+        value:
+          type: string
+          description: Value of Signout cookie
+        domain:
+          type: string
+          description: Domain of Signout cookie
+    ErrorResponse:
+      type: object
+      properties:
+        error_code:
+          type: string
+          description: Gets or sets the error code for this message
+        error_message:
+          type: string
+          description: >-
+            Gets or sets the error description for this message.  This message
+            is not intended to be displayed ot an end user
+        correlationid:
+          type: string
+          description: >-
+            Gets or sets the correlation if for this message.  This allows us to
+            find the error back if needed
+      description: >-
+        This class is the generic class that is used to send details about
+        errors back to a client.
+    PassportWithRefreshToken:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          description: "Gets or sets the refresh token.  This is a token that was originally passed in the passport as a refresh token.  It\r\n                can be used\r\n                to ask an new passport long after the passport has expired."
+        realm:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.
+        onetimepasswordurl:
+          type: string
+          description: >-
+            Gets or sets the one time password Url that can be used to do an
+            automatic login on the bean
+        access_token:
+          type: string
+          description: "Gets or sets the security token that was issued by the api.  This token is a Json token for \"internal\"\r\n            clients and a SAML2 token for \"external\" clients."
+        token_format:
+          type: array
+          items:
+            type: string
+          description: >-
+            Specifies the format of  the token passed in
+            {Euroconsumers.BeanApi.Contracts.Msg.Responses.AccessTokenResponse.SecurityToken}.
+        signout:
+          $ref: '#/components/schemas/WSignout'
+    GetOnetimePasswordUrlRequest:
+      required:
+        - onetimepasswordrealm
+        - realm
+      type: object
+      properties:
+        refreshtoken:
+          type: string
+          description: "Gets or sets the refresh token.  This is a token that was originally passed in the passport as a refresh token.  It\r\n                can be used\r\n                to ask an new passport long after the passport has expired."
+        onetimepasswordrealm:
+          type: string
+          description: Gets or sets the realm of the onetime password url
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: >-
+        This class encapsulates a request to the active API to refresh as
+        passport
+    GetOnetimePasswordUrlResponse:
+      type: object
+      properties:
+        realm:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.
+        onetimepasswordurl:
+          type: string
+          description: >-
+            Gets or sets the one time password Url that can be used to do an
+            automatic login on the bean
+    SignInRequest:
+      required:
+        - user
+        - password
+        - realm
+      type: object
+      properties:
+        user:
+          type: string
+          description: Gets or sets the identification of the user.
+        password:
+          type: string
+          description: Gets or sets the credentials for the user (usually a password)
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: This class encapsulates the request parameters for an active signin.
+    TrySigninRequest:
+      required:
+        - realm
+      type: object
+      properties:
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+          description: "List of Cookies. All cookies passed by the user\r\n            the list of cookes will be used for trysignin purpose."
+        skippoliciesandconsentscheck:
+          type: boolean
+          description: Skip policies and consents
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+    Cookie:
+      required:
+        - key
+        - value
+        - domain
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key represents Cookie Key
+        value:
+          type: string
+          description: Value represents Cookie Value
+        domain:
+          type: string
+          description: Domain represent Cookie Domain
+    PassportWithAccessTokenTrySignin:
+      type: object
+      properties:
+        realm:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.
+        cookies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Cookie'
+          description: Gets or sets the sso token that was issued by the api.
+        access_token:
+          type: string
+          description: "Gets or sets the security token that was issued by the api.  This token is a Json token for \"internal\"\r\n            clients and a SAML2 token for \"external\" clients."
+        token_format:
+          type: array
+          items:
+            type: string
+          description: >-
+            Specifies the format of  the token passed in
+            {Euroconsumers.BeanApi.Contracts.Msg.Responses.AccessTokenResponse.SecurityToken}.
+        signout:
+          $ref: '#/components/schemas/WSignout'
+    PolicyDescription:
+      required:
+        - name
+        - version
+      type: object
+      properties:
+        status:
+          type: string
+        variation:
+          type: string
+        specific:
+          type: string
+        sitecore_url:
+          type: string
+          description: "Sitecore url from where to retrieve the policy to display.\r\n            It is here for backwards compatibility but the real text is now conveniently passed in html_text so you don’t have to retrieve it yourself."
+        mandatory:
+          type: boolean
+          description: >-
+            True if the policy must be accepted by the user, false if it is not
+            mandatory
+        full_key:
+          type: string
+          description: Full key that defining in site core the referred policy
+        html_text:
+          type: string
+          description: >-
+            Temporary solution. It will contain the "Text" field of the json
+            downloaded from the "SitecoreUrl". It is in html format.
+        short_text:
+          type: string
+          description: >-
+            A short text that can be shown with the checkbox to avoid to show
+            the fulltext (which can overfloat the screen).
+        error_text:
+          type: string
+          description: >-
+            An error text that can be shown when the user did not accept this
+            policy.
+        name:
+          type: string
+          description: Name of the accepted policy
+        version:
+          type: integer
+          description: Version of the accepted policy
+          format: int32
+    ExternalIdentityProviderUrlsRequest:
+      required:
+        - wa
+        - realm
+      type: object
+      properties:
+        wa:
+          type: string
+          description: >-
+            Gets or sets the wa parameter of the message that is the requested
+            action to perform
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+    ExternalIdentityProvider:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key
+        url:
+          type: string
+          description: Url to the provider that will do the requested action
+        isavailable:
+          type: boolean
+          description: Specify if the external provider is currently available
+    MissingClaim:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key name given to the missing claim
+        type:
+          type: string
+          description: >-
+            Type of the missing claim (string, password, email, number, phone
+            number...)
+        mandatory:
+          type: boolean
+          description: Specify if the given missing claim is mandatory
+    PoliciesAndConsents:
+      type: object
+      properties:
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyDescription'
+        consents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentDescription'
+    ConsentDescription:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "Consent.Status can be: GIVEN, REVOKED, NEVERASKED, EXPIRED.\r\n            You should only show checkboxes for those who are NEVERASKED.\r\n            If you use the Euroconsumers.Consent.Contracts nuget, the possible values for status are defined in a c# enum (AcceptanceType)."
+        key:
+          type: string
+          description: Uniquely identifies a consent
+        html_text:
+          type: string
+          description: "Text to show in the front end. \r\n            Although business controls these texts we have asked them to stick to “twitter size”, i.e. 140 characters.\r\n            Whether or not that will the length of the text you get is out of our hands."
+        isPreference:
+          type: boolean
+          description: "When the user clicks “ok” (or whatever to commit the form), you should do the following :\r\n            -\tFor all those that are true and NEVERASKED you should send them as if the user checked the checkbox (which is of course not there)\r\n            -\tFor all those that are false and NEVERASKED you send the value of the checkbox."
+    SetConsentsForApplicationAndUserRequest:
+      type: object
+      properties:
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm.  This identifies the context of the
+            application.
+        fedId:
+          type: string
+        consents:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsentDescription'
+        isFakeData:
+          type: boolean
+        userJwtToken:
+          type: string
+          description: "User passport in jwt format which will be used to create the consents proof.\r\n            See consents manager documentation for more info on the consent proof."
+      description: A request to set consents and policies for a given user.
+    SetConsentsResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+        hasError:
+          type: boolean
+          readOnly: true
+    SetPoliciesForApplicationAndUserRequest:
+      type: object
+      properties:
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm.  This identifies the context of the
+            application.
+        fedid:
+          type: string
+          description: Gets or sets the federated user id.
+        variation:
+          type: string
+          description: >-
+            The optional variation for the policies. This can be empty or the
+            description of the petition, class action or promosite code +
+            specific parameter (separated by a dot)
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Policy'
+          description: All policies accepted by the user
+        isfakedata:
+          type: boolean
+          description: Gets or sets a value indicating whether this concerns a test user
+        devicetype:
+          type: string
+          description: The device type of the client
+        uishoweduserpack:
+          type: boolean
+          description: Used to for userpack
+      description: A request to set consents and policies for a given user.
+    Policy:
+      required:
+        - name
+        - version
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the accepted policy
+        version:
+          type: integer
+          description: Version of the accepted policy
+          format: int32
+      description: Used to refere to a policy accepted by a user
+    SetPoliciesResponse:
+      type: object
+    GenerateConfirmationUrlRequest:
+      required:
+        - federated_userid
+        - realm
+      type: object
+      properties:
+        federated_userid:
+          type: string
+          description: Federated userid
+        valid_until:
+          type: string
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: This class encapsulates the request parameters for confirming data
+    GenerateConfirmationUrlResponse:
+      type: object
+      properties:
+        confirmation_url:
+          type: string
+          description: The url used to confirm one's data
+    SendConfirmationEmailRequest:
+      required:
+        - federated_userid
+        - realm
+      type: object
+      properties:
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        federated_userid:
+          type: string
+          description: Email of the user to identify
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+    SendConfirmationEmailResponse:
+      type: object
+      properties:
+        success_message:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.
+    GenerateLinkToConfirmAccountAndSetAuthenticationMethodRequest:
+      required:
+        - federated_userid
+        - realm
+      type: object
+      properties:
+        federated_userid:
+          type: string
+          description: Federated userid
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: This class encapsulates the request parameters for confirming data
+    GenerateLinkToConfirmAccountAndSetAuthenticationMethodResponse:
+      type: object
+      properties:
+        confirmation_url:
+          type: string
+          description: The url used to confirm one's data and add an authentication method
+    IdentifyUserRequest:
+      required:
+        - email
+        - firstname
+        - lastname
+        - phonenumber
+        - realm
+      type: object
+      properties:
+        contexttype:
+          enum:
+            - None
+            - IsTestRun
+          type: string
+        email:
+          type: string
+          description: Email of the user to identify
+        firstname:
+          type: string
+          description: Firstname of the user to identify
+        lastname:
+          type: string
+          description: LastName of the user to identify
+        phonenumber:
+          type: string
+          description: Phonenumber of the user to identify
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Policy'
+          description: All policies accepted by the user
+        optout:
+          type: boolean
+          description: Used to signal that the user should not received email
+        sale:
+          type: boolean
+          description: "Used to signal that the user wants to receive extra emails (from other campaigns,..)\r\n            If used, the optout will be ignored (set to false)"
+        send_confirmation_email:
+          type: boolean
+          description: Used to signal that the email is confirmed
+        uishoweduserpack:
+          type: boolean
+          description: Used to for userpack
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+    IdentifyUserResponse:
+      type: object
+      properties:
+        fedid:
+          type: string
+          description: Gets or sets the user Federated identifier.
+        is_new_user:
+          type: boolean
+          description: Indicate if it is a new user
+        has_authentication_method:
+          type: boolean
+          description: "Indicate if the user has a way to authenticate it self using a valid TA account\r\n            or a external provider account"
+        access_token:
+          type: string
+          description: "Gets or sets the security token that was issued by the api.  This token is a Json token for \"internal\"\r\n            clients and a SAML2 token for \"external\" clients."
+        token_format:
+          type: array
+          items:
+            type: string
+          description: >-
+            Specifies the format of  the token passed in
+            {Euroconsumers.BeanApi.Contracts.Msg.Responses.AccessTokenResponse.SecurityToken}.
+        signout:
+          $ref: '#/components/schemas/WSignout'
+      description: "The identify user response class defines the model returned by the api when a request was done \r\n            to identify a user.  The model will contain:\r\n                * the email of the user to identify, \r\n                * the FedId associated to the user,\r\n                * A flag to indicate if its a new user,\r\n                * A flag to indicate if the user has a way to authenticate it self."
+    RegisterRequest:
+      required:
+        - user
+        - password
+        - realm
+      type: object
+      properties:
+        contexttype:
+          enum:
+            - None
+            - IsTestRun
+          type: string
+        policies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Policy'
+          description: All policies accepted by the user
+        claims:
+          type: array
+          items:
+            $ref: '#/components/schemas/Claim'
+          description: All claims given by the user
+        optout:
+          type: boolean
+          description: Used to signal that the user should not received email
+        sale:
+          type: boolean
+          description: "Used to signal that the user wants to receive extra emails (from other campaigns,..)\r\n            If used, the optout will be ignored (set to false)"
+        uishoweduserpack:
+          type: boolean
+          description: Used to for userpack
+        user:
+          type: string
+          description: Gets or sets the identification of the user.
+        password:
+          type: string
+          description: Gets or sets the credentials for the user (usually a password)
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        signout:
+          type: string
+          description: >-
+            Signout cookie value, we expect a signout cookie value from a user,
+            a user has to send values e.g. realm1|realm2|realm3
+        devicetype:
+          type: string
+          description: The device type of the client
+        audit_context:
+          type: string
+          description: Audit context used to follow action done for a user
+      description: This class encapsulates the request parameters for a user registration.
+    Claim:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Key name given to the missing claim
+        value:
+          type: string
+          description: >-
+            Type of the missing claim (string, password, email, number, phone
+            number...)
+    ResendConfirmationEmailRequest:
+      required:
+        - email
+        - realm
+      type: object
+      properties:
+        wreply:
+          type: string
+          description: "Gets or sets the wreply parameter of the message, which is the reply url to use.\r\n            If the parameter is filed with a full Url, this one will be used only if the domain is the same as the realm"
+        context:
+          type: string
+          description: >-
+            Gets or sets the context parameter, important to set when you want
+            to return to a specific page after the confirmation
+        email:
+          type: string
+          description: Email of the user to identify
+        realm:
+          type: string
+          description: >-
+            Gets or sets the realm of the application for which a security token
+            is requested
+        devicetype:
+          type: string
+          description: The device type of the client
+    ResendConfirmationEmailResponse:
+      type: object
+      properties:
+        success_message:
+          type: string
+          description: Gets or sets the realm for which the token has been issued.

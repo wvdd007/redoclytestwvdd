@@ -2,12 +2,14 @@
   "name": "acme-api",
   "version": "1.0.0",
   "dependencies": {
-    "@redocly/openapi-cli": "1.0.0-beta.50"
+    "@redocly/openapi-cli": "1.0.0-beta.50",
+    "openapi-merge-cli": "^1.1.29"
   },
   "private": true,
   "scripts": {
     "start": "openapi preview-docs",
     "build": "openapi bundle -o dist",
-    "test": "openapi lint"
+    "test": "openapi lint",
+    "merge": "openapi join openapi/openapi.yaml openapai/my.yaml"
   }
 }
